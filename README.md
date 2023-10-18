@@ -10,6 +10,7 @@ git clone https://github.com/TeohYx/QL-CashTransaction.git
 Before using the application, please follow the setup in the YoloDeepSort folder. 
 
 **Note that in Step 5, to get the video, click on the link provided, and download the video in the folder Video.
+[Video Link](https://drive.google.com/drive/folders/1emivw9NHDVsuyaQ6clhkBBTKEwgrTUlu?usp=share_link)
 
 Some important argument:
 ```
