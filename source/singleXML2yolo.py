@@ -39,5 +39,5 @@ def single_xml_to_txt(xml_file, jpg_file, class_names):
             tf.write(str(class_num) + ' ' + xy + '\n')
             print(str(class_num) + ' ' + xy + '\n')
 
-class_names = ["cashier", "customer"]
+class_names = ["cashier", "customer", "queue"]
 single_xml_to_txt("out.xml", "out.jpg", class_names)

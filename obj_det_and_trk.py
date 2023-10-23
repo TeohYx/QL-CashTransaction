@@ -23,6 +23,8 @@ import time
 import pandas as pd
 import datetime
 from intersection import Intersection
+from customer_queue import Queue
+from txt_extractor import text_extractor
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0] 
@@ -121,7 +123,8 @@ def detect(weights=ROOT / 'yolov5n.pt',
     
     # Initialize intersection object
     iters = Intersection()
-
+    # Initialize customer_query object
+    queue = Queue()
 
     save_img = not nosave and not source.endswith('.txt') 
 
@@ -167,16 +170,10 @@ def detect(weights=ROOT / 'yolov5n.pt',
     
     dt, seen = [0.0, 0.0, 0.0], 0
     
-    print(roi)
-    ROIs = []
-    with open(roi, "r") as file:
-        # file_content = file.read()
-        for line in file:
-        # Split the input string using spaces and commas as separators
-            numbers = [int(value) for part in line.split() for value in part.split(',') if value.isdigit()]
-            ROIs.append(numbers)
+    # print(roi)
 
-    print("ROIS: ",ROIs)
+    ROIs = text_extractor(roi)
+    # print("ROIS: ",ROIs)
     """ ALLOW USER TO DRAW RECTANGLE (ROI)"""
     # ROIs = rois(source)
     """
@@ -193,7 +190,12 @@ def detect(weights=ROOT / 'yolov5n.pt',
     vid_cap = cv2.VideoCapture
     s = Get the current frame
     """
+    # fps = dataset[3].get(cv2.CAP_PROP_FPS)
+    # print("fps: ",fps) 
+
     for path, im, im0s, vid_cap, s in dataset:
+        fps = int(vid_cap.get(cv2.CAP_PROP_FPS))
+        print("fps: ",fps)
         # Some setting
         t1 = time_sync()
         im = torch.from_numpy(im).to(device)
@@ -312,8 +314,13 @@ def detect(weights=ROOT / 'yolov5n.pt',
             # they are image, preset boundary, detection box and unique id for each tracked object
             iters.set_roi(ROIs)
             iters.set_box_info(box_info)
-            iters.cash_transaction()
+            iters.cash_transaction(im0)
             # check_intersect(ROIs, box_info)
+
+            queue.set_roi(ROIs)
+            queue.set_box_info(box_info)
+            queue.set_fps(fps)
+            queue.count_customers(im0)
          
             """ALLOW VIEWING FRAME BY FRAME"""
             view_img = True
@@ -366,8 +373,24 @@ def detect(weights=ROOT / 'yolov5n.pt',
         myvar.loc[len(myvar.index)] = i
     
     myvar.to_excel(excel_file, index=True)
+    
+    excel_file2 = "transaction2.xlsx"
+    # excel_format = {'Date': [], 'People': []}
+    # myvar = pd.DataFrame(excel_format)
+    # myvar.index = range(1, myvar.shape[0] + 1)
 
+    notif = queue.get_notification()
+    df = pd.DataFrame(notif)
+    writer = pd.ExcelWriter(excel_file2)
+    df.to_excel(writer, sheet_name='Notification', index=False)
 
+    writer.save()
+    # for i,j in notif:
+    #     # print(i)
+    #     myvar.loc[len(myvar.index)] = i
+    
+    # myvar.to_excel(excel_file, index=True)
+    
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov5s.pt', help='model path(s)')

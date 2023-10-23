@@ -24,6 +24,9 @@ scikit-image
 #Dashboard
 streamlit
 
+#Text
+pytesseract
+
 # Plotting ------------------------------------
 pandas>=1.1.4
 seaborn>=0.11.0

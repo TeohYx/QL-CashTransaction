@@ -1,7 +1,7 @@
 <annotation>
 	<folder>source</folder>
 	<filename>out.jpg</filename>
-	<path>D:\QLMaxincome\ObjectTracking\source\out.jpg</path>
+	<path>D:\QLMaxincome\CashDetector\source\out.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -33,6 +33,18 @@
 			<ymin>534</ymin>
 			<xmax>669</xmax>
 			<ymax>794</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>queue</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>310</ymin>
+			<xmax>676</xmax>
+			<ymax>1002</ymax>
 		</bndbox>
 	</object>
 </annotation>

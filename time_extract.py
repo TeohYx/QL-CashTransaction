@@ -31,7 +31,7 @@ def extract_time_rescale(img, scale_percent=50, custom_config = r'-c tessedit_ch
     # grayscale
     img_time = cv2.cvtColor(img_time, cv2.COLOR_BGR2GRAY)
     # thresholding (>127 = white, else black)
-    _, img_time = cv2.threshold(img_time, 160, 255, cv2.THRESH_BINARY_INV )
+    _, img_time = cv2.threshold(img_time, 165, 255, cv2.THRESH_BINARY_INV )
     img_time = cv2.bitwise_not(img_time)
 
     cv2.imwrite("check_processed_text.png", img_time)

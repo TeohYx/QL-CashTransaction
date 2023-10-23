@@ -1,5 +1,6 @@
 import datetime
 import cv2
+from time_extract import detectTime as dT 
 
 class Intersection:
     def __init__(self, roi=None, box_info=None, stop_track=3):
@@ -69,7 +70,7 @@ class Intersection:
         intersection - the intersection ratio of the ROI on detected object (c/cate)
         """    
         
-        print("Iteration: ", counter)
+        # print("Iteration: ", counter)
         # print(f"Intersection is: {inters}")
 
         # Sorted so that the arrangement is in descending order
@@ -77,7 +78,7 @@ class Intersection:
 
         return inters
 
-    def cash_transaction(self):
+    def cash_transaction(self, img):
         self.intersect = self.check_intersect()
 
         haveCashier = False
@@ -88,7 +89,7 @@ class Intersection:
         all_iden = [row[2] for row in self.intersect if float(row[3]) == 0 ]
 
         for c, cate, iden, intersection in self.intersect:
-            print(f"{c}, {cate}, {iden}, {intersection}")
+            # print(f"{c}, {cate}, {iden}, {intersection}")
             # Deal with the box where detected object have no intersection with ROIs
             if intersection == float(0):
                 """
@@ -175,7 +176,8 @@ class Intersection:
                 print("Payment happening, sending data")
 
                 # Send the time
-                current = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                # current = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                current = dT(img)
                 self.time_database.append(current)
 
                 cv2.waitKey(1000)  
